@@ -1,0 +1,7 @@
+A very simple library to help work with RESTful webservices.  Use like:
+
+HTTPResponse response = new HTTPRequest().get("http://www.brianballantine.com");
+String responseBody = response.getString();
+
+
+
