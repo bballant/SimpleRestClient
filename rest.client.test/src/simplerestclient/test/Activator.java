@@ -23,6 +23,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		sr = bundleContext.registerService(TestSuite.class.getName(), new TestSuite(SimpleRestClientTestCases.class), null);
+		sr = bundleContext.registerService(TestSuite.class.getName(), new TestSuite(NewRestClientAPITestCases.class), null);
 	}
 
 	/*

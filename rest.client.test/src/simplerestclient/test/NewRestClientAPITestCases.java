@@ -7,24 +7,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import junit.framework.TestCase;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
-import simplerestclient.HTTPRequest;
 import simplerestclient.HTTPResponse;
-
-import junit.framework.TestCase;
+import simplerestclient.SimpleHTTPRequest;
 
 /**
- * Tests to exercise simplerestclient
+ * Tests to exercise alternate APIs
  * @author kgilmer
  *
  */
-public class SimpleRestClientTestCases extends TestCase {
+public class NewRestClientAPITestCases extends TestCase {
 	
-	//Set this to whatever your OSGi HTTP Service is listening on.
+	//Set this to whatever port your OSGi HTTP Service is running on.
 	private static final int HTTP_SERVICE_PORT = 8095;
 	
 	/**
@@ -38,8 +38,7 @@ public class SimpleRestClientTestCases extends TestCase {
 		TestServlet testServlet = new TestServlet();
 		registerServlet(context, testServlet);
 		
-		HTTPRequest req = new HTTPRequest();
-		HTTPResponse resp = req.get("http://localhost:" + HTTP_SERVICE_PORT + "/test");
+		HTTPResponse resp = SimpleHTTPRequest.get("http://localhost:" + HTTP_SERVICE_PORT + "/test");
 		assertTrue(resp != null);
 		assertTrue(resp.getErrorMessage().length() == 0);
 		assertTrue(resp.getResponseCode() == 0);
@@ -59,12 +58,14 @@ public class SimpleRestClientTestCases extends TestCase {
 		TestServlet testServlet = new TestServlet();
 		registerServlet(context, testServlet);
 		
-		HTTPRequest req = new HTTPRequest();
-		HTTPResponse resp = req.post("http://localhost:" + HTTP_SERVICE_PORT + "/test", "postdata");
+		HTTPResponse resp = SimpleHTTPRequest.post("http://localhost:" + HTTP_SERVICE_PORT + "/test", "postdata");
 		assertTrue(resp != null);
 		assertTrue(resp.getErrorMessage().length() == 0);
 		assertTrue(resp.getResponseCode() == 0);
-		String content = resp.getString();
+		String content = resp.readResponse();
+		assertTrue(content.trim().equals("viola"));
+		//test reading multiple times
+		content = resp.readResponse();
 		assertTrue(content.trim().equals("viola"));
 		
 		assertFalse(testServlet.getCalled);
@@ -80,12 +81,11 @@ public class SimpleRestClientTestCases extends TestCase {
 		TestServlet testServlet = new TestServlet();
 		registerServlet(context, testServlet);
 		
-		HTTPRequest req = new HTTPRequest();
-		HTTPResponse resp = req.put("http://localhost:" + HTTP_SERVICE_PORT + "/test", "putdata");
+		HTTPResponse resp = SimpleHTTPRequest.put("http://localhost:" + HTTP_SERVICE_PORT + "/test", "putdata");
 		assertTrue(resp != null);
 		assertTrue(resp.getErrorMessage().length() == 0);
 		assertTrue(resp.getResponseCode() == 0);
-		String content = resp.getString();
+		String content = resp.readResponse();
 		assertTrue(content.trim().equals("viola"));
 		
 		assertFalse(testServlet.getCalled);
@@ -101,12 +101,11 @@ public class SimpleRestClientTestCases extends TestCase {
 		TestServlet testServlet = new TestServlet();
 		registerServlet(context, testServlet);
 		
-		HTTPRequest req = new HTTPRequest();
-		HTTPResponse resp = req.delete("http://localhost:" + HTTP_SERVICE_PORT + "/test");
+		HTTPResponse resp = SimpleHTTPRequest.delete("http://localhost:" + HTTP_SERVICE_PORT + "/test");
 		assertTrue(resp != null);
 		assertTrue(resp.getErrorMessage().length() == 0);
 		assertTrue(resp.getResponseCode() == 0);
-		String content = resp.getString();
+		String content = resp.readResponse();
 		assertTrue(content.trim().equals("viola"));
 		
 		assertFalse(testServlet.getCalled);

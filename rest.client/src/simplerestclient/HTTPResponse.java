@@ -78,6 +78,7 @@ public class HTTPResponse {
 	
 	private static final String DEFAULT_ERROR_MESSAGE = "There was a connection error.  The server responded with status code ";
 	private HttpURLConnection _connection;
+	private String responseData;
 	
 	/**
 	 * constructor must take in an HttpURLConnection
@@ -105,8 +106,20 @@ public class HTTPResponse {
 	 * @param connection
 	 * @return InputStream body of HTTP Response
 	 * @throws BugnetException 
+	 * @Deprecated use getInputStream()
 	 */
 	public InputStream getStream() throws IOException, HTTPException {
+		return getInputStream();
+	}	
+
+	/**
+	 * Get the input stream from the connection.
+	 *  
+	 * @return
+	 * @throws HTTPException
+	 * @throws IOException
+	 */
+	public InputStream getInputStream() throws HTTPException, IOException {
 		InputStream is = null;
 		try {
 			is = _connection.getInputStream();
@@ -114,7 +127,8 @@ public class HTTPResponse {
 			throwHTTPException(e);
 		}
 		return is;
-	}	
+	}
+
 
 	/**
 	 * Get a string from the connection
@@ -122,25 +136,27 @@ public class HTTPResponse {
 	 * @param connection
 	 * @return String body of HTTP Response
 	 * @throws IOException 
+	 * @Deprecated use readResponse()
 	 */
 	public String getString() throws IOException, HTTPException {
-		InputStream is = getStream();
-		return inputStreamToString(is);
+		return readResponse();
 	}
 
 	/**
-	 * Get an Image from the connection
+	 * Read all bytes from response and load into a String.
+	 * Safe to call multiple times.
 	 * 
-	 * @param connection
-	 * @return Payload of HTTP response as image
+	 * @return
 	 * @throws IOException
 	 */
-	/*  Depends on some dragonfly stuff which isn't integrated yet, but want to implement soon
-	public ImageData getImage() throws IOException, HTTPException {
-		InputStream is = getStream();
-		return inputStreamToImage(is);
+	public String readResponse() throws IOException {
+		if (responseData == null) {
+			InputStream is = getStream();
+			responseData = inputStreamToString(is);
+		}
+		
+		return responseData;
 	}
-	*/
 	
 	/**
 	 * get response code from request
@@ -234,30 +250,4 @@ public class HTTPResponse {
 		rd.close();
 		return resp;
     }
-    
-
-    /**
-     * Convert input stream to Image
-     * 
-     * @param is
-     * @return
-     * @throws IOException
-     */
-    /* Depends on some dragonfly stuff which isn't integrated yet, but want to integrate soon
-	private static ImageData inputStreamToImage(InputStream is) throws IOException {
-		byte[] buf = new byte[1024];
-		int read = 0;
-
-		DynamicByteBuffer dynBuf = new DynamicByteBuffer();
-		while ((read = is.read(buf)) > 0) {
-			for (int i = 0; i < read; ++i) {
-				dynBuf.append(buf[i]);
-			}
-		}
-
-		ImageData id = new ImageData(new ByteArrayInputStream(dynBuf.toArray()));
-		return id;
-	}
-	*/
-
 }
