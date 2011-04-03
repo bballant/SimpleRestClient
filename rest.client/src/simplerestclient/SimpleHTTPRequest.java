@@ -33,6 +33,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 /**
@@ -396,6 +397,16 @@ public class SimpleHTTPRequest {
         	}
         }
         return buf.toString();
+	}
+
+	public static HTTPResponse get(String url, HashMap<String, String> headers) throws IOException {
+		HttpURLConnection conn = getDefaultConnectionProvider().getConnection(url);
+		conn.setDoInput(true);
+		conn.setDoOutput(false);
+		for (Entry<String, String> e: headers.entrySet()) {
+			conn.addRequestProperty(e.getKey(), e.getValue());
+		}
+		return connect(conn);
 	}
 	
 }

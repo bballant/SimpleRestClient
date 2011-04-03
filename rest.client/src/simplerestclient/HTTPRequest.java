@@ -33,6 +33,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 /**
@@ -88,6 +89,22 @@ public class HTTPRequest {
 		HttpURLConnection conn = _connectionProvider.getConnection(url);
 		conn.setDoInput(true);
 		conn.setDoOutput(false);
+		return connect(conn);
+	}
+	
+	/**
+     * Do an authenticated HTTP GET from url
+     * 
+     * @param url   String URL to connect to
+     * @return      HttpURLConnection ready with response data
+     */
+	public HTTPResponse get(String url, Map<String, String> headers) throws IOException {
+		HttpURLConnection conn = _connectionProvider.getConnection(url);
+		conn.setDoInput(true);
+		conn.setDoOutput(false);
+		for (Entry<String, String> e: headers.entrySet()) {
+			conn.addRequestProperty(e.getKey(), e.getValue());
+		}
 		return connect(conn);
 	}
 	
@@ -153,7 +170,7 @@ public class HTTPRequest {
 	 */
 	public HTTPResponse post(String url, Map properties) throws IOException {
 		String data = propertyString(properties);
-		HashMap headers = new HashMap(); 
+		HashMap<String, String> headers = new HashMap<String, String>(); 
 		headers.put("Content-Type", "application/x-www-form-urlencoded");		
 		return post(url, data, headers);
 	}
@@ -310,7 +327,7 @@ public class HTTPRequest {
 	 */
 	public HTTPResponse put(String url, Map properties) throws IOException {
 		String data = propertyString(properties);
-		HashMap headers = new HashMap(); 
+		HashMap<String, String> headers = new HashMap<String, String>(); 
 		headers.put("Content-Type", "application/x-www-form-urlencoded");
 		return put(url, data, headers);
 	}	
