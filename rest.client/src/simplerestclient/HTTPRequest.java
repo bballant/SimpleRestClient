@@ -51,7 +51,7 @@ import java.util.Map.Entry;
  * 
  * 
  */
-public class HTTPRequest {
+public class HTTPRequest implements IHTTPRequest {
 	////////////////////////////////////////////////  HTTP REQUEST METHODS	
 	
 	private static final String HEADER_TYPE  = "Content-Type";

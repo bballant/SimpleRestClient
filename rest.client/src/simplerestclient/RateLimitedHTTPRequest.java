@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author kgilmer
  *
  */
-public class RateLimitedHTTPRequest {
+public class RateLimitedHTTPRequest implements IHTTPRequest {
 
 	private final int waitMillis;
 	private HTTPRequest httpRequest;
@@ -31,12 +31,10 @@ public class RateLimitedHTTPRequest {
 		lock = new ReentrantLock(true);
 	}
 	
-	/**
-	 * @param url
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#get(java.lang.String)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#get(java.lang.String)
 	 */
+	@Override
 	public HTTPResponse get(String url) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -49,13 +47,10 @@ public class RateLimitedHTTPRequest {
 		}		
 	}
 
-	/**
-	 * @param url
-	 * @param headers
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#get(java.lang.String, java.util.Map)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#get(java.lang.String, java.util.Map)
 	 */
+	@Override
 	public HTTPResponse get(String url, Map<String, String> headers) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -67,13 +62,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param data
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#post(java.lang.String, java.lang.String)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#post(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HTTPResponse post(String url, String data) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -85,14 +77,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param data
-	 * @param headers
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#post(java.lang.String, java.lang.String, java.util.Map)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#post(java.lang.String, java.lang.String, java.util.Map)
 	 */
+	@Override
 	public HTTPResponse post(String url, String data, Map headers) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -104,13 +92,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param stream
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#post(java.lang.String, java.io.InputStream)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#post(java.lang.String, java.io.InputStream)
 	 */
+	@Override
 	public HTTPResponse post(String url, InputStream stream) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -122,13 +107,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param properties
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#post(java.lang.String, java.util.Map)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#post(java.lang.String, java.util.Map)
 	 */
+	@Override
 	public HTTPResponse post(String url, Map properties) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -140,13 +122,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param data
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#post(java.lang.String, byte[])
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#post(java.lang.String, byte[])
 	 */
+	@Override
 	public HTTPResponse post(String url, byte[] data) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -158,13 +137,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param parameters
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#postMultipart(java.lang.String, java.util.Map)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#postMultipart(java.lang.String, java.util.Map)
 	 */
+	@Override
 	public HTTPResponse postMultipart(String url, Map parameters) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -176,13 +152,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param data
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#put(java.lang.String, java.lang.String)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#put(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HTTPResponse put(String url, String data) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -194,14 +167,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param data
-	 * @param headers
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#put(java.lang.String, java.lang.String, java.util.Map)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#put(java.lang.String, java.lang.String, java.util.Map)
 	 */
+	@Override
 	public HTTPResponse put(String url, String data, Map headers) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -213,13 +182,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param stream
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#put(java.lang.String, java.io.InputStream)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#put(java.lang.String, java.io.InputStream)
 	 */
+	@Override
 	public HTTPResponse put(String url, InputStream stream) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -231,12 +197,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#delete(java.lang.String)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#delete(java.lang.String)
 	 */
+	@Override
 	public HTTPResponse delete(String url) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -248,13 +212,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @param properties
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#put(java.lang.String, java.util.Map)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#put(java.lang.String, java.util.Map)
 	 */
+	@Override
 	public HTTPResponse put(String url, Map properties) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -266,12 +227,10 @@ public class RateLimitedHTTPRequest {
 		}
 	}
 
-	/**
-	 * @param url
-	 * @return
-	 * @throws IOException
-	 * @see simplerestclient.HTTPRequest#head(java.lang.String)
+	/* (non-Javadoc)
+	 * @see simplerestclient.IHTTPRequest#head(java.lang.String)
 	 */
+	@Override
 	public HTTPResponse head(String url) throws IOException {
 		if (!lockAndWait()) 
 			return null;
@@ -286,7 +245,7 @@ public class RateLimitedHTTPRequest {
 	public static void main(String[] args) {
 		ExecutorService es = Executors.newFixedThreadPool(10);
 		
-		final RateLimitedHTTPRequest hr = new RateLimitedHTTPRequest(2000);
+		final IHTTPRequest hr = new RateLimitedHTTPRequest(2000);
 		
 		for (int i = 0; i < 20; ++i) {
 			final int j = i;
