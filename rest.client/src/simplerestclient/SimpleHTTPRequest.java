@@ -109,16 +109,13 @@ public class SimpleHTTPRequest {
 	 * @return
 	 * @throws IOException
 	 */
-	public static HTTPResponse post(String url, String data, Map headers) throws IOException {
+	public static HTTPResponse post(String url, String data, Map<String, String> headers) throws IOException {
 		HttpURLConnection conn = getDefaultConnectionProvider().getConnection(url);
-		if (headers != null) {
-			Iterator iterator = headers.keySet().iterator();  
-			String key; 
-			while(iterator.hasNext()) {
-				key = iterator.next().toString(); 
-				conn.setRequestProperty(key, headers.get(key).toString()); 
-			}
-		}		
+		
+		if (headers != null) 
+			for (Entry<String, String> e: headers.entrySet())
+				conn.setRequestProperty(e.getKey(), e.getValue());
+			
 		conn.setDoOutput(true);
 		OutputStreamWriter osr = new OutputStreamWriter(conn.getOutputStream());
 		osr.write(data);
@@ -149,9 +146,9 @@ public class SimpleHTTPRequest {
 	 * @return
 	 * @throws IOException
 	 */
-	public static HTTPResponse post(String url, Map properties) throws IOException {
+	public static HTTPResponse post(String url, Map<String, String> properties) throws IOException {
 		String data = propertyString(properties);
-		HashMap headers = new HashMap(); 
+		HashMap<String, String> headers = new HashMap<String, String>(); 
 		headers.put("Content-Type", "application/x-www-form-urlencoded");		
 		return post(url, data, headers);
 	}
@@ -186,7 +183,7 @@ public class SimpleHTTPRequest {
 	 * @param properties
 	 * @return
 	 */
-	public static HTTPResponse postMultipart(String url, Map parameters) throws IOException {
+	public static HTTPResponse postMultipart(String url, Map<String, String> parameters) throws IOException {
 		HttpURLConnection conn = getDefaultConnectionProvider().getConnection(url);
 		conn.setRequestMethod("POST");
 		String boundary = createMultipartBoundary();
@@ -253,16 +250,12 @@ public class SimpleHTTPRequest {
 	 * @return
 	 * @throws IOException
 	 */
-	public static HTTPResponse put(String url, String data, Map headers) throws IOException{
+	public static HTTPResponse put(String url, String data, Map<String, String> headers) throws IOException{
 		HttpURLConnection connection = getDefaultConnectionProvider().getConnection(url);
-		if (headers != null) {
-			Iterator iterator = headers.keySet().iterator();  
-			String key; 
-			while(iterator.hasNext()) {
-				key = iterator.next().toString(); 
-				connection.setRequestProperty(key, headers.get(key).toString()); 
-			}
-		}
+		if (headers != null) 
+			for (Entry<String, String> e: headers.entrySet())
+				connection.setRequestProperty(e.getKey(), e.getValue()); 
+		
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		OutputStreamWriter osr = new OutputStreamWriter(connection.getOutputStream());
@@ -307,9 +300,9 @@ public class SimpleHTTPRequest {
 	 * @return
 	 * @throws IOException
 	 */
-	public static HTTPResponse put(String url, Map properties) throws IOException {
+	public static HTTPResponse put(String url, Map<String, String> properties) throws IOException {
 		String data = propertyString(properties);
-		HashMap headers = new HashMap(); 
+		HashMap<String, String> headers = new HashMap<String, String>(); 
 		headers.put("Content-Type", "application/x-www-form-urlencoded");
 		return put(url, data, headers);
 	}	
